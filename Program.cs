@@ -93,6 +93,8 @@ public class SecurityAnalyzerService(
 
         // ── Step 1: dotnet sonarscanner begin ───────────────────────────────────
         var beginArgs = $"begin /k:\"{projectKey}\" /d:sonar.host.url=\"{_sonarHostUrl}\"";
+        if (!string.IsNullOrWhiteSpace(_sonarToken))
+            beginArgs += $" /d:sonar.login=\"{_sonarToken}\"";
         var beginResult = await RunScannerStepAsync(
             "dotnet", $"sonarscanner {beginArgs}", projectDirectory, isTokenStep: true);
 
