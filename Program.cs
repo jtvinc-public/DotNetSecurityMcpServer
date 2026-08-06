@@ -173,7 +173,8 @@ public class SecurityAnalyzerService(
         if (isTokenStep && !string.IsNullOrWhiteSpace(_sonarToken))
         {
             psi.EnvironmentVariables["SONAR_TOKEN"] = _sonarToken;
-            _logger.LogDebug("Injected SONAR_TOKEN into process environment.");
+            psi.EnvironmentVariables["SONAR_LOGIN"] = _sonarToken;
+            _logger.LogDebug("Injected SONAR_TOKEN and SONAR_LOGIN into process environment.");
         }
         else if (isTokenStep)
         {
