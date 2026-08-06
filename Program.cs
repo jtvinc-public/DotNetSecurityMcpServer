@@ -63,7 +63,8 @@ public class SecurityAnalyzerService(
     /// Analyzes a local .NET project for security vulnerabilities using the
     /// dotnet-sonarscanner CLI (begin → build → end workflow).
     /// </summary>
-    [McpServerTool]
+    /// <remarks></remarks>
+    [McpServerTool(Name = "ScanProjectAsync")]
     [Description(
         "Analyzes a local .NET project for security vulnerabilities using the " +
         "'dotnet-sonarscanner' CLI. This runs the full begin/build/end workflow " +
