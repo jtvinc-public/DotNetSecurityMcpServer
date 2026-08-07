@@ -116,7 +116,7 @@ public class SecurityAnalyzerService(
 
         // ── Step 3: dotnet sonarscanner end ─────────────────────────────────────
         var endResult = await RunScannerStepAsync(
-            "dotnet", "sonarscanner end", projectDirectory, isTokenStep: false);
+            "dotnet", "sonarscanner end", projectDirectory, isTokenStep: true);
 
         // ── Compose final report ────────────────────────────────────────────────
         var report = new StringBuilder();
