@@ -95,6 +95,10 @@ public class SecurityAnalyzerService(
         var beginArgs = $"begin /k:\"{projectKey}\" /d:sonar.host.url=\"{_sonarHostUrl}\"";
         if (!string.IsNullOrWhiteSpace(_sonarToken))
             beginArgs += $" /d:sonar.token=\"{_sonarToken}\"";
+
+        // Exclude directories that create noise in issue counts
+        beginArgs += " /d:sonar.exclusions=\"**/*.dll,**/*.exe,node_modules/**,.venv/**,.sonarqube/**,.git/**,**/bin/**,**/obj/**\"";
+
         var beginResult = await RunScannerStepAsync(
             "dotnet", $"sonarscanner {beginArgs}", projectDirectory, isTokenStep: true);
 
