@@ -115,8 +115,11 @@ public class SecurityAnalyzerService(
         // pick up what analysis it did capture. We'll report build issues later.
 
         // ── Step 3: dotnet sonarscanner end ─────────────────────────────────────
+        var endArgs = "end";
+        if (!string.IsNullOrWhiteSpace(_sonarToken))
+            endArgs += $" /d:sonar.token=\"{_sonarToken}\"";
         var endResult = await RunScannerStepAsync(
-            "dotnet", "sonarscanner end", projectDirectory, isTokenStep: true);
+            "dotnet", $"sonarscanner {endArgs}", projectDirectory, isTokenStep: true);
 
         // ── Compose final report ────────────────────────────────────────────────
         var report = new StringBuilder();
