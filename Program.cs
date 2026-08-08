@@ -96,8 +96,8 @@ public class SecurityAnalyzerService(
         if (!string.IsNullOrWhiteSpace(_sonarToken))
             beginArgs += $" /d:sonar.token=\"{_sonarToken}\"";
 
-        // Exclude directories that create noise in issue counts
-        beginArgs += " /d:sonar.exclusions=\"**/*.dll,**/*.exe,node_modules/**,.venv/**,.sonarqube/**,.git/**,**/bin/**,**/obj/**\"";
+        // Exclude directories that create noise in issue counts. We do not want to scan build artifacts, only direct source code.
+        beginArgs += " /d:sonar.exclusions=\"**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb\"";
 
         var beginResult = await RunScannerStepAsync(
             "dotnet", $"sonarscanner {beginArgs}", projectDirectory, isTokenStep: true);
