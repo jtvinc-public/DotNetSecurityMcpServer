@@ -81,7 +81,9 @@ public class SecurityAnalyzerService(
         [Description("Optional: path to OpenCover coverage report XML file")]
         string? coverageReportPath = null,
         [Description("Optional: comma-separated file/path exclusions appended to defaults (e.g. 'Api/**,Infrastructure/**')")]
-        string? exclusions = null)
+        string? exclusions = null,
+        [Description("Optional: comma-separated file/path exclusions from coverage calculation only.")]
+        string? coverageExclusions = null)
     {
         // ── Validation ──────────────────────────────────────────────────────────
         if (!Directory.Exists(projectDirectory))
@@ -112,7 +114,8 @@ public class SecurityAnalyzerService(
             beginArgs += $" /d:sonar.cs.opencover.reportsPaths=\"{coverageReportPath}\"";
         }
 
-        var baseExclusions = " /d:sonar.exclusions=\"**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb\"";
+        // These are always excluded.
+        var baseExclusions = "**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb,**/node_modules/**,**/dist/**,**/.vite/**";
 
         // We do not want to scan build artifacts, or configured project-based exclusions.
         if (!string.IsNullOrWhiteSpace(exclusions))
@@ -121,6 +124,12 @@ public class SecurityAnalyzerService(
         }
 
         beginArgs += $" /d:sonar.exclusions=\"{baseExclusions}\"";
+
+        // Coverage exclusions: scan for issues but don't count in coverage.
+        if (!string.IsNullOrWhiteSpace(coverageExclusions))
+        {
+            beginArgs += $" /d:sonar.coverage.exclusions=\"{coverageExclusions}\"";
+        }
 
         var beginResult = await RunScannerStepAsync(
             "dotnet", $"sonarscanner {beginArgs}", projectDirectory, isTokenStep: true);
@@ -155,7 +164,7 @@ public class SecurityAnalyzerService(
         report.AppendLine("--- 1. Scanner Begin ---");
         report.AppendLine(beginResult.CombinedOutput.TrimEnd());
         report.AppendLine();
-        report.AppendLine("--- 2. Build ---");
+        report.AppendLine("--- 2. Build ---");402332
         report.AppendLine($"Exit code: {buildResult.ExitCode}");
         report.AppendLine(buildResult.CombinedOutput.TrimEnd());
         report.AppendLine();
