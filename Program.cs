@@ -79,7 +79,9 @@ public class SecurityAnalyzerService(
         [Description("Optional: Git branch name for SonarQube branch analysis.")]
         string? branchName = null,
         [Description("Optional: path to OpenCover coverage report XML file")]
-        string? coverageReportPath = null)
+        string? coverageReportPath = null,
+        [Description("Optional: comma-separated file/path exclusions appended to defaults (e.g. 'Api/**,Infrastructure/**')")]
+        string? exclusions = null)
     {
         // ── Validation ──────────────────────────────────────────────────────────
         if (!Directory.Exists(projectDirectory))
@@ -110,8 +112,15 @@ public class SecurityAnalyzerService(
             beginArgs += $" /d:sonar.cs.opencover.reportsPaths=\"{coverageReportPath}\"";
         }
 
-        // Exclude directories that create noise in issue counts. We do not want to scan build artifacts, only direct source code.
-        beginArgs += " /d:sonar.exclusions=\"**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb\"";
+        var baseExclusions = " /d:sonar.exclusions=\"**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb\"";
+
+        // We do not want to scan build artifacts, or configured project-based exclusions.
+        if (!string.IsNullOrWhiteSpace(exclusions))
+        {
+            baseExclusions += "," + exclusions;
+        }
+
+        beginArgs += $" /d:sonar.exclusions=\"{baseExclusions}\"";
 
         var beginResult = await RunScannerStepAsync(
             "dotnet", $"sonarscanner {beginArgs}", projectDirectory, isTokenStep: true);
@@ -245,7 +254,7 @@ public class SecurityAnalyzerService(
         {
             combined.AppendLine("STDOUT:");
             combined.AppendLine(stdoutBuffer.ToString().TrimEnd());
-        }
+        } 
         if (stderrBuffer.Length > 0)
         {
             combined.AppendLine("STDERR:");
