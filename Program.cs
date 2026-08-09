@@ -75,7 +75,11 @@ public class SecurityAnalyzerService(
         [Description("The unique identifier (Key) for the project inside SonarQube / SonarCloud.")]
         string projectKey,
         [Description("Optional: path to a specific solution or project file to build. If omitted, builds the entire directory.")]
-        string? projectOrSolutionPath = null)
+        string? projectOrSolutionPath = null,
+        [Description("Optional: Git branch name for SonarQube branch analysis.")]
+        string? branchName = null,
+        [Description("Optional: path to OpenCover coverage report XML file")]
+        string? coverageReportPath = null)
     {
         // ── Validation ──────────────────────────────────────────────────────────
         if (!Directory.Exists(projectDirectory))
@@ -95,6 +99,16 @@ public class SecurityAnalyzerService(
         var beginArgs = $"begin /k:\"{projectKey}\" /d:sonar.host.url=\"{_sonarHostUrl}\"";
         if (!string.IsNullOrWhiteSpace(_sonarToken))
             beginArgs += $" /d:sonar.token=\"{_sonarToken}\"";
+
+        if (!string.IsNullOrEmpty(branchName))
+        {
+            beginArgs += $" /d:sonar.branch.name=\"{branchName}\"";
+        }
+
+        if (!string.IsNullOrEmpty(coverageReportPath) && File.Exists(coverageReportPath))
+        {
+            beginArgs += $" /d:sonar.cs.opencover.reportsPaths=\"{coverageReportPath}\"";
+        }
 
         // Exclude directories that create noise in issue counts. We do not want to scan build artifacts, only direct source code.
         beginArgs += " /d:sonar.exclusions=\"**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb\"";
