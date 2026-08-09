@@ -164,7 +164,7 @@ public class SecurityAnalyzerService(
         report.AppendLine("--- 1. Scanner Begin ---");
         report.AppendLine(beginResult.CombinedOutput.TrimEnd());
         report.AppendLine();
-        report.AppendLine("--- 2. Build ---");402332
+        report.AppendLine("--- 2. Build ---");
         report.AppendLine($"Exit code: {buildResult.ExitCode}");
         report.AppendLine(buildResult.CombinedOutput.TrimEnd());
         report.AppendLine();
