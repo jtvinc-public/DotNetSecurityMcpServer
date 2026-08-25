@@ -201,11 +201,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--server-dll",
-        default=os.environ.get(
-            "SONAR_MCP_DLL",
-            r"C:\JTV\Work\Other\DotNetSecurityMcpServer\bin\Release\net10.0\DotNetSecurityMcpServer.dll",
-        ),
-        help="Path to the DotNetSecurityMcpServer DLL.",
+        default=os.environ.get("SONAR_MCP_DLL"),
+        help="Path to the DotNetSecurityMcpServer DLL. Required unless SONAR_MCP_DLL env var is set.",
     )
     parser.add_argument(
         "--sonar-host-url",
