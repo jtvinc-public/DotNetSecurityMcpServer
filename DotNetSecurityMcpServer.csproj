@@ -21,6 +21,9 @@
     <Content Include="..\..\consulting-site\docs\DOTNETSECURITYMCPSERVER-WORKFLOW.md">
       <Link>DOTNETSECURITYMCPSERVER-WORKFLOW.md</Link>
     </Content>
+    <Content Include="..\..\consulting-site\docs\LOCAL-MCP-SCAN-GUIDE.md">
+      <Link>LOCAL-MCP-SCAN-GUIDE.md</Link>
+    </Content>
     <Content Include="..\..\consulting-site\docs\SONARQUBE-MCP-INTEGRATION.md">
       <Link>SONARQUBE-MCP-INTEGRATION.md</Link>
     </Content>

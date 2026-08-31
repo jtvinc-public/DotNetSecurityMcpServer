@@ -2,5 +2,7 @@
   <Folder Name="/PythonApps/">
     <File Path="../../consulting-site/ci/sonar_scan_client.py" />
   </Folder>
-  <Project Path="DotNetSecurityMcpServer.csproj" />
+  <Project Path="DotNetSecurityMcpServer.csproj">
+    <BuildType Project="Release" />
+  </Project>
 </Solution>

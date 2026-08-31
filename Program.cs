@@ -114,7 +114,7 @@ public class SecurityAnalyzerService(
             beginArgs += $" /d:sonar.cs.opencover.reportsPaths=\"{coverageReportPath}\"";
         }
 
-        // These are always excluded.
+        // These are always excluded. Add anything else to exclude from analysis.
         var baseExclusions = "**/bin/**,**/obj/**,**/.sonarqube/**,**/*.dll,**/*.exe,**/*.pdb,**/node_modules/**,**/dist/**,**/.vite/**";
 
         // We do not want to scan build artifacts, or configured project-based exclusions.
